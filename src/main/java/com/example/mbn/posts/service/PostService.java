@@ -1,8 +1,19 @@
 package com.example.mbn.posts.service;
 
 import com.example.mbn.posts.dto.PostRequestDto;
+import com.example.mbn.posts.dto.PostResponseDto;
 import com.example.mbn.posts.entity.Post;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 public interface PostService {
-    Post createPost(PostRequestDto requestDto);
+    Post createPost(PostRequestDto requestDto);         // 게시글 저장
+    List<String> uploadImages(List<MultipartFile> files) throws IOException; // 다중 이미지 업로드
+
+    List<Post> getAllPosts();
+
+    PostResponseDto getPostById(Long id); // 반환 타입과 매개변수 모두 맞춤
+
 }
