@@ -6,8 +6,10 @@ import com.example.mbn.posts.entity.Post;
 import com.example.mbn.posts.entity.PostImage;
 import com.example.mbn.posts.repository.PostImageRepository;
 import com.example.mbn.posts.repository.PostRepository;
+import com.example.mbn.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,24 +26,25 @@ public class  PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
-    private final String uploadDir = new File("src/main/resources/static/uploads/").getAbsolutePath() + "/";
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
 
     @Override
     @Transactional
-    public Post createPost(PostRequestDto requestDto) {
+    public Post createPost(PostRequestDto requestDto, User user) {
         Post post = requestDto.toEntity();
+        post.setUser(user); // ✅ 작성자 설정
 
-        // 이미지 URL이 null이 아니고, 하나라도 있으면 → PostImage로 변환
         if (requestDto.getImageUrls() != null && !requestDto.getImageUrls().isEmpty()) {
             List<PostImage> imageEntities = requestDto.getImageUrls().stream()
                     .map(url -> new PostImage(url, post))
                     .toList();
-
-            post.getImages().addAll(imageEntities); // Post와 연결!
+            post.getImages().addAll(imageEntities);
         }
 
-        return postRepository.save(post); // Post와 연관된 이미지들까지 저장됨
+        return postRepository.save(post);
     }
 
     
@@ -59,15 +62,19 @@ public class  PostServiceImpl implements PostService {
                     .orElse("");
 
             String fileName = UUID.randomUUID() + extension;
-            File saveFile = new File(uploadDir + fileName);
+
+            // 절대 경로로 보정
+            String absolutePath = new File(uploadDir).getAbsolutePath() + "/";
+            File saveFile = new File(absolutePath + fileName);
             saveFile.getParentFile().mkdirs();
             file.transferTo(saveFile);
 
-            urls.add("/uploads/" + fileName);
+            urls.add("/uploads/" + fileName); // 이건 static 기준이라 그대로 둬도 됨
         }
 
         return urls;
     }
+
 
     @Override
     public List<Post>getAllPosts(){

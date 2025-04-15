@@ -4,6 +4,7 @@ import com.example.mbn.jwt.JwtProvider;
 import com.example.mbn.oauth.config.KakaoOAuthConfig;
 import com.example.mbn.oauth.dto.KakaoUserInfoDto;
 import com.example.mbn.oauth.service.KakaoOAuthService;
+import com.example.mbn.user.dto.OAuthUserInfoDto;
 import com.example.mbn.user.entity.User;
 import com.example.mbn.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -38,8 +39,9 @@ public class OAuthController {
     @GetMapping("/kakao/callback")
     public void kakaoCallback(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
         String accessToken = kakaoOAuthService.getAccessToken(code);
-        KakaoUserInfoDto kakaoUserInfo = kakaoOAuthService.getUserInfo(accessToken);
-        User user = userService.registerOrLogin(kakaoUserInfo);
+        OAuthUserInfoDto oauthUserInfo = kakaoOAuthService.getUserInfo(accessToken);
+        User user = userService.registerOrLogin(oauthUserInfo);
+
         String jwtToken = jwtProvider.createToken(user.getId());
 
         // ✅ 리액트 쪽으로 리디렉션 + JWT 쿼리 파라미터로 전달

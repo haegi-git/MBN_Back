@@ -14,23 +14,30 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String header = request.getHeader("Authorization");
+        String uri = request.getRequestURI();
+        String method = request.getMethod();
 
+        // 🔓 예외: GET /posts 및 하위 경로는 토큰 없이 허용
+        if ("GET".equalsIgnoreCase(method) && uri.startsWith("/posts")) {
+            return true;
+        }
+
+        // 🔐 나머지는 토큰 필요
+        String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
 
-        String token = header.substring(7); // "Bearer " 제거
-
+        String token = header.substring(7);
         if (!jwtProvider.validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
 
         Long userId = jwtProvider.getUserIdFromToken(token);
-        request.setAttribute("userId", userId); // 👉 컨트롤러에서 꺼내쓸 수 있음
-
+        request.setAttribute("userId", userId);
         return true;
     }
+
 }

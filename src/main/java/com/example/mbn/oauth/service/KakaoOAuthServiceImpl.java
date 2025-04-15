@@ -2,6 +2,7 @@ package com.example.mbn.oauth.service;
 
 import com.example.mbn.oauth.config.KakaoOAuthConfig;
 import com.example.mbn.oauth.dto.KakaoUserInfoDto;
+import com.example.mbn.user.dto.OAuthUserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
     }
 
     @Override
-    public KakaoUserInfoDto getUserInfo(String accessToken) {
+    public OAuthUserInfoDto getUserInfo(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
 
         // 헤더 설정
@@ -83,11 +84,12 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
         String nickname = (String) profile.get("nickname");
         String profileImageUrl = (String) profile.get("profile_image_url");
 
-        return KakaoUserInfoDto.builder()
-                .id(id)
+        return OAuthUserInfoDto.builder()
+                .socialId(String.valueOf(id))
                 .email(email)
                 .nickname(nickname)
                 .profileImageUrl(profileImageUrl)
+                .provider("kakao")
                 .build();
     }
 

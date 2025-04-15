@@ -15,7 +15,10 @@ public class User {
     private Long id;
 
     @Column(unique = true)
-    private Long kakaoId;
+    private String socialId;
+
+    @Column(nullable = false)
+    private String provider; // kakao, google 등
 
     @Column(unique = false)
     private String email;

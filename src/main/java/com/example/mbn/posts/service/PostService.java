@@ -3,13 +3,15 @@ package com.example.mbn.posts.service;
 import com.example.mbn.posts.dto.PostRequestDto;
 import com.example.mbn.posts.dto.PostResponseDto;
 import com.example.mbn.posts.entity.Post;
+import com.example.mbn.user.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface PostService {
-    Post createPost(PostRequestDto requestDto);         // 게시글 저장
+    Post createPost(PostRequestDto requestDto, User user);
+
     List<String> uploadImages(List<MultipartFile> files) throws IOException; // 다중 이미지 업로드
 
     List<Post> getAllPosts();

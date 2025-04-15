@@ -14,6 +14,10 @@ public class PostResponseDto {
     private String title;
     private String content;
 
+    private String nickname;
+    private String profileImageUrl;
+
+
     private String tag;
     private String platform;
 
@@ -38,12 +42,17 @@ public class PostResponseDto {
         this.imageUrls = post.getImages().stream()
                 .map(PostImage::getUrl)
                 .toList();
+
+        this.nickname = post.getUser().getNickname(); // ✅ 추가
+        this.profileImageUrl = post.getUser().getProfileImageUrl(); // ✅ 추가
     }
 
     public PostResponseDto(Post post, List<PostImage> images) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.nickname = post.getUser().getNickname(); // ✅ 추가
+        this.profileImageUrl = post.getUser().getProfileImageUrl(); // ✅ 추가
         this.tag = post.getTag();
         this.platform = post.getPlatform();
         this.likeCount = post.getLikeCount();
