@@ -1,5 +1,6 @@
 package com.example.mbn.posts.entity;
 
+import com.example.mbn.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,7 +44,11 @@ public class Post {
         }
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user; // 작성자
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user; // 작성자
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
