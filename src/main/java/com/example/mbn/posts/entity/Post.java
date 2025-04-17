@@ -51,4 +51,11 @@ public class Post {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public void update(String title, String content, String platform, String tag) {
+        this.title = title;
+        this.content = content;
+        this.platform = platform;
+        this.tag = tag;
+    }
 }

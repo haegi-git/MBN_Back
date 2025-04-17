@@ -22,7 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtAuthInterceptor)
-                .addPathPatterns("/user","/posts")
+                .addPathPatterns("/user","/posts","/posts/{id}")
                 .excludePathPatterns(
                         "/uploads/**",       // 🔓 이미지 경로 허용
                         "/oauth/**",         // 🔓 로그인 콜백 허용
