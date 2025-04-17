@@ -2,6 +2,7 @@ package com.example.mbn.posts.service;
 
 import com.example.mbn.posts.dto.PostRequestDto;
 import com.example.mbn.posts.dto.PostResponseDto;
+import com.example.mbn.posts.dto.PostUpdateRequestDto;
 import com.example.mbn.posts.entity.Post;
 import com.example.mbn.user.entity.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,5 +18,7 @@ public interface PostService {
     List<Post> getAllPosts();
 
     PostResponseDto getPostById(Long id); // 반환 타입과 매개변수 모두 맞춤
+
+    void updatePost(Long postId, User user, PostUpdateRequestDto dto, List<MultipartFile> newImages) throws IOException ;
 
 }

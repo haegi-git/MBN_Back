@@ -2,6 +2,7 @@ package com.example.mbn.posts.controller;
 
 import com.example.mbn.posts.dto.PostRequestDto;
 import com.example.mbn.posts.dto.PostResponseDto;
+import com.example.mbn.posts.dto.PostUpdateRequestDto;
 import com.example.mbn.posts.entity.Post;
 import com.example.mbn.posts.service.PostService;
 import com.example.mbn.user.entity.User;
@@ -62,6 +63,22 @@ public class PostController {
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long id) {
         PostResponseDto responseDto = postService.getPostById(id);
         return ResponseEntity.ok(responseDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updatePost(
+            @PathVariable Long id,
+            @RequestPart("dto") PostUpdateRequestDto dto,
+            @RequestPart(value = "newImages", required = false) List<MultipartFile> newImages,
+            HttpServletRequest request
+    ) throws IOException {
+        Long userId = (Long) request.getAttribute("userId");
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다"));
+
+        postService.updatePost(id, user, dto, newImages);
+        return ResponseEntity.ok("게시글 수정 완료");
     }
 
 }
