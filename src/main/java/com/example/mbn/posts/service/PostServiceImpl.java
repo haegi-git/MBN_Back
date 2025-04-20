@@ -148,4 +148,30 @@ public class  PostServiceImpl implements PostService {
         // 6. 게시글 내용 수정
         post.update(dto.getTitle(), dto.getContent(), dto.getPlatform(), dto.getTag());
     }
+
+    @Transactional
+    @Override
+    public void deletePost(Long postId, User user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        // 작성자 검증
+        if (!post.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("삭제 권한이 없습니다.");
+        }
+
+        // 이미지 먼저 삭제 (실제 파일 + DB)
+        List<PostImage> images = postImageRepository.findAllByPost(post);
+        for (PostImage image : images) {
+            String filePath = new File(uploadDir).getAbsolutePath() + "/" + extractFileName(image.getUrl());
+            File file = new File(filePath);
+            if (file.exists()) {
+                file.delete();
+            }
+            postImageRepository.delete(image); // DB 삭제
+        }
+
+        // 게시글 삭제
+        postRepository.delete(post);
+    }
 }
