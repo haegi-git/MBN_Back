@@ -81,4 +81,19 @@ public class PostController {
         return ResponseEntity.ok("게시글 수정 완료");
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePost(
+            @PathVariable Long id,
+            HttpServletRequest request
+    ) {
+        Long userId = (Long) request.getAttribute("userId");
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        postService.deletePost(id, user);
+        return ResponseEntity.ok("게시글 삭제 완료");
+    }
+
+
 }

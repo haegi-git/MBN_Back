@@ -21,4 +21,6 @@ public interface PostService {
 
     void updatePost(Long postId, User user, PostUpdateRequestDto dto, List<MultipartFile> newImages) throws IOException ;
 
+    void deletePost(Long postId, User user);
+
 }

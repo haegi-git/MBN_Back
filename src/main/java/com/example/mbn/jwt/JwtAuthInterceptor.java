@@ -21,6 +21,9 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         if ("GET".equalsIgnoreCase(method) && uri.startsWith("/posts")) {
             return true;
         }
+        if ("GET".equalsIgnoreCase(method) && uri.startsWith("/comments")) {
+            return true;
+        }
 
         // 🔐 나머지는 토큰 필요
         String header = request.getHeader("Authorization");

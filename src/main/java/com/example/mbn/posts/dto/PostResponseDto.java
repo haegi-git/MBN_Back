@@ -11,6 +11,8 @@ import java.util.List;
 @Getter
 public class PostResponseDto {
     private Long id;
+    private Long authorId;
+
     private String title;
     private String content;
 
@@ -31,6 +33,7 @@ public class PostResponseDto {
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
+        this.authorId = post.getUser().getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.tag = post.getTag();
@@ -49,6 +52,7 @@ public class PostResponseDto {
 
     public PostResponseDto(Post post, List<PostImage> images) {
         this.id = post.getId();
+        this.authorId = post.getUser().getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.nickname = post.getUser().getNickname(); // ✅ 추가
