@@ -5,7 +5,9 @@ import com.example.mbn.posts.dto.PostResponseDto;
 import com.example.mbn.posts.dto.PostUpdateRequestDto;
 import com.example.mbn.posts.entity.Post;
 import com.example.mbn.posts.entity.PostImage;
+import com.example.mbn.posts.entity.PostLike;
 import com.example.mbn.posts.repository.PostImageRepository;
+import com.example.mbn.posts.repository.PostLikeRepository;
 import com.example.mbn.posts.repository.PostRepository;
 import com.example.mbn.user.entity.User;
 import jakarta.transaction.Transactional;
@@ -27,6 +29,7 @@ public class  PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -87,10 +90,12 @@ public class  PostServiceImpl implements PostService {
     }
 
 
+    @Transactional
     @Override
     public PostResponseDto getPostById(Long id){
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 게시글"));
+        post.increaseViewCount();
         List<PostImage> images = postImageRepository.findAllByPost(post);
 
         return new PostResponseDto(post, images);  // 💡 리턴 추가!
@@ -173,5 +178,28 @@ public class  PostServiceImpl implements PostService {
 
         // 게시글 삭제
         postRepository.delete(post);
+    }
+
+    @Transactional
+    @Override
+    public void toggleLike(Long postId, User user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        Optional<PostLike> existingLike = postLikeRepository.findByPostAndUser(post, user);
+
+        if (existingLike.isPresent()) {
+            // 좋아요 취소
+            postLikeRepository.delete(existingLike.get());
+            post.decreaseLike(); // likeCount--
+        } else {
+            // 좋아요 추가
+            PostLike like = PostLike.builder()
+                    .post(post)
+                    .user(user)
+                    .build();
+            postLikeRepository.save(like);
+            post.increaseLike(); // likeCount++
+        }
     }
 }

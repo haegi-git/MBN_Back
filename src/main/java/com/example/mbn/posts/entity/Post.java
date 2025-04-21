@@ -58,4 +58,16 @@ public class Post {
         this.platform = platform;
         this.tag = tag;
     }
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
+
+    public void increaseLike() {
+        this.likeCount++;
+    }
+
+    public void decreaseLike() {
+        if (this.likeCount > 0) this.likeCount--;
+    }
+
 }

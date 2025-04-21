@@ -28,6 +28,8 @@ public class Comment {
 
     private boolean isHidden = false; // 👈 이거 추가
 
+    private boolean isDeleted = false;
+
     private LocalDateTime createdAt;
 
     private int likeCount;
@@ -52,5 +54,9 @@ public class Comment {
         this.content = newContent;
         this.isEdited = true;
         this.editedAt = LocalDateTime.now();
+    }
+
+    public void markAsDeleted() {
+        this.isDeleted = true;
     }
 }

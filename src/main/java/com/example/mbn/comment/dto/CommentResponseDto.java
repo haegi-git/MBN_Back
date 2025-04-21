@@ -13,6 +13,7 @@ public class CommentResponseDto {
     private String profileImageUrl;
     private boolean isEdited;
     private boolean isHidden;
+    private boolean isDeleted;
     private LocalDateTime createdAt;
 
     public CommentResponseDto(Comment comment) {
@@ -22,6 +23,7 @@ public class CommentResponseDto {
         this.profileImageUrl = comment.getUser().getProfileImageUrl();
         this.isEdited = comment.isEdited();
         this.isHidden = comment.isHidden();
+        this.isDeleted = comment.isDeleted();
         this.createdAt = comment.getCreatedAt();
     }
 }
