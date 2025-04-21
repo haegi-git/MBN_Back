@@ -96,4 +96,16 @@ public class PostController {
     }
 
 
+    @PostMapping("/{id}/like")
+    public ResponseEntity<String> toggleLike(
+            @PathVariable Long id,
+            HttpServletRequest request
+    ) {
+        Long userId = (Long) request.getAttribute("userId");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        postService.toggleLike(id, user);
+        return ResponseEntity.ok("좋아요 토글 완료");
+    }
 }

@@ -23,4 +23,6 @@ public interface PostService {
 
     void deletePost(Long postId, User user);
 
+    void toggleLike(Long postId, User user);
+
 }

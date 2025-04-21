@@ -4,15 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
-public class CommentRequestDto {
-    private Long postId;
-
+public class CommentUpdateRequestDto {
     @NotBlank
-    @Size(min = 3, max = 100)
+    @Size(min = 1, max = 100)
     private String content;
 }
