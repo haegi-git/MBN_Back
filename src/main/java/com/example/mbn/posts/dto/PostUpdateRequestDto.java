@@ -10,7 +10,6 @@ import java.util.List;
 public class PostUpdateRequestDto {
     private String title;
     private String content;
-    private String platform;
-    private String tag;
+    private String category;
     private List<String> existingImageUrls; // ✅ 남겨둘 기존 이미지 URL들
 }

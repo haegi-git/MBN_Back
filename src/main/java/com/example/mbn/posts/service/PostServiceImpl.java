@@ -42,8 +42,10 @@ public class  PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Post createPost(PostRequestDto requestDto, User user) {
+
         Post post = requestDto.toEntity();
         post.setUser(user); // ✅ 작성자 설정
+
 
         if (requestDto.getImageUrls() != null && !requestDto.getImageUrls().isEmpty()) {
             List<PostImage> imageEntities = requestDto.getImageUrls().stream()
@@ -151,7 +153,7 @@ public class  PostServiceImpl implements PostService {
         post.getImages().addAll(allImages);
 
         // 6. 게시글 내용 수정
-        post.update(dto.getTitle(), dto.getContent(), dto.getPlatform(), dto.getTag());
+        post.update(dto.getTitle(), dto.getContent(), dto.getCategory());
     }
 
     @Transactional

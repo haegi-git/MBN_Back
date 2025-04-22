@@ -45,6 +45,7 @@ public class PostController {
     public ResponseEntity<List<String>> uploadImages(@RequestParam("files") List<MultipartFile> files) {
         try {
             List<String> imageUrls = postService.uploadImages(files);
+
             return ResponseEntity.ok(imageUrls);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
