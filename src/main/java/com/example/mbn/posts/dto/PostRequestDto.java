@@ -20,9 +20,7 @@ public class PostRequestDto {
     private String content;
 
     @NotBlank
-    private String platform;
-
-    private String tag;
+    private String category;
 
     private List<String> imageUrls;
 
@@ -31,9 +29,9 @@ public class PostRequestDto {
         return Post.builder()
                 .title(this.title)
                 .content(this.content)
-                .platform(this.platform)
+                .category(this.category)
                 .images(new ArrayList<>())
-                .tag(this.tag).build();
+                .build();
     }
 
 }

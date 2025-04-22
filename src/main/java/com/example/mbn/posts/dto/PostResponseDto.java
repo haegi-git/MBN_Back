@@ -19,9 +19,7 @@ public class PostResponseDto {
     private String nickname;
     private String profileImageUrl;
 
-
-    private String tag;
-    private String platform;
+    private String category;
 
     private List<String> imageUrls;
 
@@ -36,8 +34,7 @@ public class PostResponseDto {
         this.authorId = post.getUser().getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.tag = post.getTag();
-        this.platform = post.getPlatform();
+        this.category = post.getCategory();
         this.likeCount = post.getLikeCount();
         this.viewCount = post.getViewCount();
         this.reportCount = post.getReportCount();
@@ -57,8 +54,7 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.nickname = post.getUser().getNickname(); // ✅ 추가
         this.profileImageUrl = post.getUser().getProfileImageUrl(); // ✅ 추가
-        this.tag = post.getTag();
-        this.platform = post.getPlatform();
+        this.category = post.getCategory();
         this.likeCount = post.getLikeCount();
         this.viewCount = post.getViewCount();
         this.reportCount = post.getReportCount();

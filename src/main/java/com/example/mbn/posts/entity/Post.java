@@ -22,8 +22,7 @@ public class Post {
     private String title;
     private String content;
 
-    private String tag; // 말머리
-    private String platform; // PS, Steam 등
+    private String category; // PS, Steam 등
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostImage> images = new ArrayList<>();
@@ -52,11 +51,10 @@ public class Post {
         this.user = user;
     }
 
-    public void update(String title, String content, String platform, String tag) {
+    public void update(String title, String content, String platform) {
         this.title = title;
         this.content = content;
-        this.platform = platform;
-        this.tag = tag;
+        this.category = platform;
     }
     public void increaseViewCount() {
         this.viewCount++;
