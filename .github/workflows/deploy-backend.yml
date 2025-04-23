@@ -4,7 +4,7 @@ name: Deploy Backend
 on:
   push:
     branches:
-      - haegi # ← 너가 사용하는 백엔드 브랜치로 바꿔도 돼
+      - haegi # ← 사용하는 백엔드 브랜치로 맞춰줘
 
 jobs:
   deploy:
@@ -19,6 +19,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Give permission to gradlew
+        run: chmod +x ./gradlew
 
       - name: Build Spring Boot App
         run: ./gradlew build -x test
