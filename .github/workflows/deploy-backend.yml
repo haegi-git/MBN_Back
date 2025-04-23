@@ -48,6 +48,6 @@ jobs:
             
             pm2 delete mbn-back || true
             
-            pm2 start "bash -c 'source ~/.bashrc && java -jar $JAR_NAME --server.port=3334'" --name mbn-back
+            pm2 start "bash -c 'source ~/.bashrc && java -jar build/libs/mbn-0.0.1-SNAPSHOT.jar --server.port=3334'" --name mbn-back
             
             pm2 save
