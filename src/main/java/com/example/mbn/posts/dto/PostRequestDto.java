@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PostRequestDto {
     @NotBlank
-    @Size(min = 3, max = 15)
+    @Size(min = 3, max = 40)
     private String title;
     @NotBlank
     @Size(min = 3, max = 2500)
