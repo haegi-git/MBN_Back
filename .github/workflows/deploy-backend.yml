@@ -44,10 +44,9 @@ jobs:
           port: 8807
           script: |
             cd /home/haegi/mbn-back
-            JAR_NAME=$(ls build/libs/*.jar | head -n 1)
             
             pm2 delete mbn-back || true
             
-            pm2 start "bash -c 'source ~/.bashrc && java -jar build/libs/mbn-0.0.1-SNAPSHOT.jar --server.port=3334'" --name mbn-back
+            pm2 start ecosystem.config.js
             
             pm2 save
