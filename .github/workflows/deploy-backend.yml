@@ -33,7 +33,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 8807
           source: build/libs/*.jar
-          target: /home/haegi/mbn-back
+          target: /home/haegi/mbn-back/build/libs/
 
       - name: Deploy on server using PM2
         uses: appleboy/ssh-action@v1.0.3
@@ -44,6 +44,7 @@ jobs:
           port: 8807
           script: |
             cd /home/haegi/mbn-back
+            chmod +x start.sh
             pm2 delete mbn-back || true
-            pm2 start "bash -c 'source ~/.bashrc && java -jar build/libs/mbn-0.0.1-SNAPSHOT.jar --server.port=3334'" --name mbn-back
+            pm2 start ./start.sh --name mbn-back
             pm2 save
