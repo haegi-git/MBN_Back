@@ -46,13 +46,6 @@ jobs:
           port: 8807
           script: |
             cd /home/haegi/mbn-back
-
-            # 환경변수 파일 존재 여부 확인
-            if [ ! -f .env ]; then
-              echo ".env 파일이 없습니다. 서버에 직접 추가해주세요."
-              exit 1
-            fi
-
             pm2 delete mbn-back || true
             pm2 start ecosystem.config.js
             pm2 save
