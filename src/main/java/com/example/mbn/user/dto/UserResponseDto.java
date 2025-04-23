@@ -15,6 +15,7 @@ public class UserResponseDto {
     private String nickname;
     private String profileImageUrl;
     private String provider;
+    private String rule;
     public static UserResponseDto from(User user) {
         return UserResponseDto.builder()
                 .id(user.getId())
@@ -22,6 +23,7 @@ public class UserResponseDto {
                 .nickname(user.getNickname())
                 .profileImageUrl(user.getProfileImageUrl())
                 .provider(user.getProvider())
+                .rule(user.getRule())
                 .build();
     }
 }

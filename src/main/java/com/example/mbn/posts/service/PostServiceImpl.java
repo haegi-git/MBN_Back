@@ -13,6 +13,8 @@ import com.example.mbn.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -87,10 +89,14 @@ public class  PostServiceImpl implements PostService {
 
 
     @Override
-    public List<Post>getAllPosts(){
-        return postRepository.findAll();
+    public Page<Post> getAllPosts(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<Post> getAllPosts(String category, Pageable pageable) {
+        return postRepository.findByCategory(category, pageable);
+    }
 
     @Transactional
     @Override
@@ -203,5 +209,10 @@ public class  PostServiceImpl implements PostService {
             postLikeRepository.save(like);
             post.increaseLike(); // likeCount++
         }
+    }
+
+    public List<PostResponseDto> searchPosts(String keyword){
+        List<Post> posts = postRepository.searchByKeyword(keyword);
+        return posts.stream().map(post -> new PostResponseDto(post, post.getImages())).toList();
     }
 }

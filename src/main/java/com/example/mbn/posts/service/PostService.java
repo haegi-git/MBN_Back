@@ -5,6 +5,8 @@ import com.example.mbn.posts.dto.PostResponseDto;
 import com.example.mbn.posts.dto.PostUpdateRequestDto;
 import com.example.mbn.posts.entity.Post;
 import com.example.mbn.user.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -15,8 +17,8 @@ public interface PostService {
 
     List<String> uploadImages(List<MultipartFile> files) throws IOException; // 다중 이미지 업로드
 
-    List<Post> getAllPosts();
-
+    Page<Post> getAllPosts(Pageable pageable);
+    Page<Post> getAllPosts(String category, Pageable pageable);
     PostResponseDto getPostById(Long id); // 반환 타입과 매개변수 모두 맞춤
 
     void updatePost(Long postId, User user, PostUpdateRequestDto dto, List<MultipartFile> newImages) throws IOException ;
@@ -24,5 +26,7 @@ public interface PostService {
     void deletePost(Long postId, User user);
 
     void toggleLike(Long postId, User user);
+
+    List<PostResponseDto> searchPosts(String keyword);
 
 }

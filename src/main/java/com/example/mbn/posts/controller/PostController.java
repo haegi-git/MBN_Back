@@ -10,6 +10,8 @@ import com.example.mbn.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,10 +56,17 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostResponseDto>> getAllPosts() {
-        List<Post> posts = postService.getAllPosts();
-        List<PostResponseDto> postResponseDto = posts.stream().map(PostResponseDto::new).toList();
-        return ResponseEntity.ok(postResponseDto);
+    public ResponseEntity<Page<PostResponseDto>> getAllPosts(
+            @RequestParam(required = false) String category,
+            Pageable pageable
+    ) {
+        Page<Post> posts = (category == null || category.isBlank())
+                ? postService.getAllPosts(pageable)
+                : postService.getAllPosts(category, pageable);
+
+        Page<PostResponseDto> response = posts.map(post -> new PostResponseDto(post, post.getImages()));
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
@@ -108,5 +117,11 @@ public class PostController {
 
         postService.toggleLike(id, user);
         return ResponseEntity.ok("좋아요 토글 완료");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PostResponseDto>> searchPosts(@RequestParam String keyword) {
+        List<PostResponseDto> results = postService.searchPosts(keyword);
+        return ResponseEntity.ok(results);
     }
 }
