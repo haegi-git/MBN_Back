@@ -1,10 +1,9 @@
-# .github/workflows/deploy-backend.yml
 name: Deploy Backend
 
 on:
   push:
     branches:
-      - haegi # ← 사용하는 백엔드 브랜치로 맞춰줘
+      - haegi
 
 jobs:
   deploy:
@@ -20,23 +19,23 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Give permission to gradlew
+      - name: Grant execute permission to gradlew
         run: chmod +x ./gradlew
 
       - name: Build Spring Boot App
         run: ./gradlew build -x test
 
-      - name: Copy build file to server via SCP
+      - name: Copy JAR to server via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 8807
-          source: 'build/libs/*.jar'
-          target: '/home/haegi/mbn-back'
+          source: build/libs/*.jar
+          target: /home/haegi/mbn-back/build/libs/
 
-      - name: Deploy with SSH and PM2
+      - name: Deploy on server using PM2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -45,6 +44,7 @@ jobs:
           port: 8807
           script: |
             cd /home/haegi/mbn-back
-            JAR_NAME=$(ls build/libs/*.jar | head -n 1)
+            chmod +x start.sh
             pm2 delete mbn-back || true
-            pm2 start "java -jar $JAR_NAME" --name mbn-back -- --server.port=3334
+            pm2 start ./start.sh --name mbn-back
+            pm2 save
