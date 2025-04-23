@@ -9,6 +9,7 @@ import com.example.mbn.user.entity.User;
 import com.example.mbn.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/oauth")
 public class OAuthController {
+
+    @Value("${frontend.domain}")
+    private String frontendDomain;
 
     private final KakaoOAuthService kakaoOAuthService;
     private final KakaoOAuthConfig kakaoOAuthConfig;
@@ -45,7 +49,7 @@ public class OAuthController {
         String jwtToken = jwtProvider.createToken(user.getId());
 
         // ✅ 리액트 쪽으로 리디렉션 + JWT 쿼리 파라미터로 전달
-        String redirectUrl = "http://localhost:5173/oauth/callback/success?token=" + jwtToken;
+        String redirectUrl = frontendDomain+"oauth/callback/success?token=" + jwtToken;
         response.sendRedirect(redirectUrl);
     }
 
