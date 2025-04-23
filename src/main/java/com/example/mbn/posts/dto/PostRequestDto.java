@@ -16,7 +16,7 @@ public class PostRequestDto {
     @Size(min = 3, max = 15)
     private String title;
     @NotBlank
-    @Size(min = 3, max = 500)
+    @Size(min = 3, max = 2500)
     private String content;
 
     @NotBlank

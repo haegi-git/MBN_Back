@@ -20,6 +20,8 @@ public class User {
     @Column(nullable = false)
     private String provider; // kakao, google 등
 
+    private String rule;
+
     @Column(unique = false)
     private String email;
 

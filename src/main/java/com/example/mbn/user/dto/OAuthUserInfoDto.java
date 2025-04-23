@@ -13,5 +13,6 @@ public class OAuthUserInfoDto {
     private String nickname;
     private String profileImageUrl;
     private String provider; // "kakao", "google" 등
+    private String rule;
 }
 

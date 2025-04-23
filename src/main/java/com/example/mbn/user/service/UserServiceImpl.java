@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
                             .profileImageUrl(userInfo.getProfileImageUrl())
                             .provider(userInfo.getProvider())
                             .socialId(userInfo.getSocialId())
+                            .rule("user")
                             .build();
 
                     return userRepository.save(newUser);
