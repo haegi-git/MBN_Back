@@ -45,17 +45,9 @@ jobs:
           script: |
             cd /home/haegi/mbn-back
             JAR_NAME=$(ls build/libs/*.jar | head -n 1)
-
+            
             pm2 delete mbn-back || true
-
-            pm2 start "java \
-              -DHAEGI_SERVER_MBN_URL='${{ secrets.HAEGI_SERVER_MBN_URL }}' \
-              -DHAEGI_SERVER_USERNAME='${{ secrets.HAEGI_SERVER_USERNAME }}' \
-              -DHAEGI_SERVER_PASSWORD='${{ secrets.HAEGI_SERVER_PASSWORD }}' \
-              -DJWT_SECRET='${{ secrets.JWT_SECRET }}' \
-              -DKAKAO_CLIENT_ID='${{ secrets.KAKAO_CLIENT_ID }}' \
-              -DKAKAO_REDIRECT_URL='${{ secrets.KAKAO_REDIRECT_URL }}' \
-              -DFRONT_DOMAIN_URL='${{ secrets.FRONT_DOMAIN_URL }}' \
-              -jar $JAR_NAME --server.port=3334" --name mbn-back
-
+            
+            pm2 start "bash -c 'source ~/.bashrc && java -jar $JAR_NAME --server.port=3334'" --name mbn-back
+            
             pm2 save
