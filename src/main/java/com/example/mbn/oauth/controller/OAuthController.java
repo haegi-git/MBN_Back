@@ -52,6 +52,4 @@ public class OAuthController {
         String redirectUrl = frontendDomain+"oauth/callback/success?token=" + jwtToken;
         response.sendRedirect(redirectUrl);
     }
-
-
 }
