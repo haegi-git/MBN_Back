@@ -33,7 +33,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 8807
           source: |
-            build/libs/*.jar
+            build/libs/mbn-0.0.1-SNAPSHOT.jar
             ecosystem.config.js
           target: /home/haegi/mbn-back
 
