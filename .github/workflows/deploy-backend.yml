@@ -1,10 +1,9 @@
-# .github/workflows/deploy-backend.yml
 name: Deploy Backend
 
 on:
   push:
     branches:
-      - haegi # ← 사용하는 백엔드 브랜치로 맞춰줘
+      - haegi # 브랜치명 맞춰서 사용
 
 jobs:
   deploy:
@@ -19,9 +18,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Give permission to gradlew
-        run: chmod +x ./gradlew
 
       - name: Build Spring Boot App
         run: ./gradlew build -x test
@@ -46,5 +42,17 @@ jobs:
           script: |
             cd /home/haegi/mbn-back
             JAR_NAME=$(ls build/libs/*.jar | head -n 1)
+
             pm2 delete mbn-back || true
-            pm2 start "java -jar $JAR_NAME" --name mbn-back -- --server.port=3334
+
+            pm2 start "java \
+              -DHAEGI_SERVER_MBN_URL='${{ secrets.HAEGI_SERVER_MBN_URL }}' \
+              -DHAEGI_SERVER_USERNAME='${{ secrets.HAEGI_SERVER_USERNAME }}' \
+              -DHAEGI_SERVER_PASSWORD='${{ secrets.HAEGI_SERVER_PASSWORD }}' \
+              -DJWT_SECRET='${{ secrets.JWT_SECRET }}' \
+              -DKAKAO_CLIENT_ID='${{ secrets.KAKAO_CLIENT_ID }}' \
+              -DKAKAO_REDIRECT_URL='${{ secrets.KAKAO_REDIRECT_URL }}' \
+              -DFRONT_DOMAIN_URL='${{ secrets.FRONT_DOMAIN_URL }}' \
+              -jar $JAR_NAME --server.port=3334" --name mbn-back
+
+            pm2 save
