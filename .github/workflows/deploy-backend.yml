@@ -25,16 +25,14 @@ jobs:
       - name: Build Spring Boot App
         run: ./gradlew build -x test
 
-      - name: Copy JAR and ecosystem.config.js to server via SCP
+      - name: Copy JAR to server via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 8807
-          source: |
-            build/libs/*.jar
-            ecosystem.config.js
+          source: build/libs/*.jar
           target: /home/haegi/mbn-back
 
       - name: Deploy on server using PM2
@@ -46,15 +44,6 @@ jobs:
           port: 8807
           script: |
             cd /home/haegi/mbn-back
-
-            export HAEGI_SERVER_MBN_URL=${{ secrets.HAEGI_SERVER_MBN_URL }}
-            export HAEGI_SERVER_USERNAME=${{ secrets.HAEGI_SERVER_USERNAME }}
-            export HAEGI_SERVER_PASSWORD=${{ secrets.HAEGI_SERVER_PASSWORD }}
-            export JWT_SECRET=${{ secrets.JWT_SECRET }}
-            export KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}
-            export KAKAO_REDIRECT_URL=${{ secrets.KAKAO_REDIRECT_URL }}
-            export FRONT_DOMAIN_URL=${{ secrets.FRONT_DOMAIN_URL }}
-
             pm2 delete mbn-back || true
-            pm2 start ecosystem.config.js
+            pm2 start "bash -c 'source ~/.bashrc && java -jar build/libs/mbn-0.0.1-SNAPSHOT.jar --server.port=3334'" --name mbn-back
             pm2 save
