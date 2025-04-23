@@ -14,7 +14,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -98,6 +100,12 @@ public class  PostServiceImpl implements PostService {
         return postRepository.findByCategory(category, pageable);
     }
 
+    @Override
+    public List<Post> getRecentPosts(int limit) {
+        Pageable pageable = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return postRepository.findAll(pageable).getContent();
+    }
+
     @Transactional
     @Override
     public PostResponseDto getPostById(Long id){
@@ -137,7 +145,10 @@ public class  PostServiceImpl implements PostService {
         }
 
         // 3. 새 이미지 업로드
-        List<String> newImageUrls = uploadImages(newImages); // 재사용
+        List<String> newImageUrls = new ArrayList<>();
+        if (newImages != null && !newImages.isEmpty()) {
+            newImageUrls = uploadImages(newImages);
+        }
 
         // 4. PostImage 엔티티로 변환해서 Post에 추가
         List<PostImage> allImages = new ArrayList<>();

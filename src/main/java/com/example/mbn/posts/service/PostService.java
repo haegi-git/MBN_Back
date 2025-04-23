@@ -19,6 +19,9 @@ public interface PostService {
 
     Page<Post> getAllPosts(Pageable pageable);
     Page<Post> getAllPosts(String category, Pageable pageable);
+
+    List<Post> getRecentPosts(int limit);
+
     PostResponseDto getPostById(Long id); // 반환 타입과 매개변수 모두 맞춤
 
     void updatePost(Long postId, User user, PostUpdateRequestDto dto, List<MultipartFile> newImages) throws IOException ;

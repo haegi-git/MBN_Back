@@ -18,10 +18,19 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         String method = request.getMethod();
 
         // 🔓 예외: GET /posts 및 하위 경로는 토큰 없이 허용
-        if ("GET".equalsIgnoreCase(method) && uri.startsWith("/posts")) {
-            return true;
+        if ("GET".equalsIgnoreCase(method)) {
+            if (uri.startsWith("/posts")
+                    || uri.startsWith("/comments")
+                    || uri.startsWith("/uploads")
+                    || uri.startsWith("/oauth")
+                    || uri.equals("/error")
+                    || uri.equals("/favicon.ico")) {
+                return true; // 인증 없이 통과
+            }
         }
-        if ("GET".equalsIgnoreCase(method) && uri.startsWith("/comments")) {
+
+        // ✅ POST 요청 중 이미지 업로드는 허용
+        if ("POST".equalsIgnoreCase(method) && uri.equals("/posts/upload")) {
             return true;
         }
 
