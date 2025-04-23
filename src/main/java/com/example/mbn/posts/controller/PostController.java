@@ -69,6 +69,16 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/recent")
+    public ResponseEntity<List<PostResponseDto>> getRecentPosts(
+            @RequestParam(defaultValue = "10") int limit) {
+        List<Post> posts = postService.getRecentPosts(limit);
+        List<PostResponseDto> result = posts.stream()
+                .map(PostResponseDto::new)
+                .toList();
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long id) {
         PostResponseDto responseDto = postService.getPostById(id);

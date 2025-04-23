@@ -22,10 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtAuthInterceptor)
-                .addPathPatterns("/user","/posts","/posts/{id}",
-                        "/comments","/comments/{id}",
-                        "/posts/{id}/like","/timers","/timers/**",
-                        "/timers/{id}/status","/timers/{id}")
+                .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/uploads",
                         "/posts/upload",
