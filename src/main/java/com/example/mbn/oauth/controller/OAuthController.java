@@ -50,7 +50,7 @@ public class OAuthController {
 
         // ✅ 리액트 쪽으로 리디렉션 + JWT 쿼리 파라미터로 전달
         String redirectUrl = frontendDomain+"oauth/callback/success?token=" + jwtToken;
-        System.out.println(redirectUrl);
+        System.out.println(redirectUrl+"gdgdfgdfgdfgㅇㅀㅇㅀㅋㅋㅋ여기임");
         response.sendRedirect(redirectUrl);
     }
 }
